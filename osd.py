@@ -365,16 +365,6 @@ class Combo(Button):
 
 
 #-------------------------------------------------------------------------------------------
-'''
-def initSprite(device):
-    sprite = POINTER(ID3DXSprite)()
-    try:
-        d3dxdll.D3DXCreateSprite(device, byref(sprite))
-    except:
-        print traceback.format_exc()
-    print 'initSprite'
-    return sprite
-'''
 
 def createFont(device,h):
     ANTIALIASED_QUALITY = 4
@@ -658,6 +648,5 @@ class OSD(comtypes.COMObject):
         self.osdService = None
 
 if __name__ == "__main__": #osd.py /regserver
-    #comtypes.server.localserver.run([OSD])
     from comtypes.server.register import UseCommandLine
     UseCommandLine(OSD)
