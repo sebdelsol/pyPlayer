@@ -31,3 +31,8 @@ How to use
 * register the OSD COM object with osd.py /regserver
 * see miniplayer.py
 
+Limitations
+-----------
+* no windowed mode (move and resize events are not handled)
+* no fallback when the graph can't be build
+* no mouse handling
