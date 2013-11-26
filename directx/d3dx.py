@@ -1,4 +1,3 @@
-
 from directx.types import *
 from directx.d3d import *
 
@@ -24,7 +23,7 @@ except:
     raise
 
 D3DX_VERSION = 0x0902
-D3DX_SDK_VERSION = 30
+D3DX_SDK_VERSION = 43
 
 D3DXMATRIX = D3DMATRIX
 D3DXVECTOR3 = D3DVECTOR
