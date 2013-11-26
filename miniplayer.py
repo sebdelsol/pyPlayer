@@ -4,16 +4,14 @@ REALSEEKER = False
 #---------------------------------------------------------------------------------------
 import gc
 import os
-import win32con,win32gui,win32event
+import win32con,win32gui,win32event,win32api
 import msvcrt
 import math
 import datetime
 import time
-import Queue
 import threading
 import re
 import unidecode
-import win32api
 import traceback
 from string import Template
 import iso639
