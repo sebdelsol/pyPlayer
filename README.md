@@ -18,8 +18,7 @@ Dependencies
 
 * filters : LAV filters, XYsubFilter, Reclock, madVR
 * direct3d9 43
-* pywin32
-* comtypes 
+* python modules: pywin32, comtypes, unidecode, psyco
  
 How to use
 ----------
