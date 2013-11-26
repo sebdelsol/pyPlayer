@@ -1285,8 +1285,6 @@ if __name__ == "__main__":
         win32gui.PumpMessages()
 
     #---------------------------------------------------------------------------------------        
-    #import psyco
-    #psyco.bind(MiniPlayer)
 
     PLAYFAVORITE = False
     favoriteFile = 'favorite.miniplayer'
@@ -1304,9 +1302,9 @@ if __name__ == "__main__":
         with open(favoriteFile,'rb') as f:
             favorite = pickle.load(f)
 
-    movieFile = ['movie1.avi','movie2.mkv']
+    movieFile = ['movie1.avi','movie2.mkv'] # or a string if only one file in the playlist
 
     player.playMovie(favorite,movieFile,0)
-    player.runMsgLoop(window.movieEnded)
+    player.runMsgLoop(window.movieEnded) #need to be called in the same thread as playMovie !
     print 'EXIT'
     
