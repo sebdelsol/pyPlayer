@@ -1,16 +1,5 @@
 # -*- coding: cp1252 -*-
 
-# TODO
-# OK ? - monkey test avec cmd 
-# verifier format bizarre => fallback ?
-# IMPROVE Seek, recup le vrai tps du seek (pb avec dvd)
-# IMPROVE - ajouter getmodule pour generer import comtypes
-
-# TODO real Seek
-# TODO limiter nb render queue de madvr en pause
-# TODO virer hack 
-# TODO free filtergraph 
-
 REALSEEKER = False
 #---------------------------------------------------------------------------------------
 import gc
