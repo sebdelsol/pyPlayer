@@ -3,32 +3,32 @@ pyPlayer
 
 Python directshow movie player
 
-* plays nearly every formats with LAV filters and XYsubFilter
+* plays nearly every formats with LAV filters
 * fullscreen exclusive mode with madVR
-* dvd support (with dvdNavigator filter on windows 7)
+* dvd support with dvdNavigator filter
 * automatic aspect ratio
 * bookmarks
 * default languages
-* smooth and antialiased OSD
+* responsive antialiased OSD
 * audio and subtitles tracks selection
 * log scale volume
 * seamless seek in playlist
 * movie rotation
 * filter graph is registered in the ROT to be viewed with graphedit
 * multi threaded
-* embedded in any window
+* could be embedded in any window
 
 Dependencies
 ------------
 
 * directshow filters : LAV filters, XYsubFilter, Reclock, madVR
-* direct3d9 (needs d3dx9_43.dll in system32)
+* direct3d9 (d3dx9_43.dll)
 * python modules: pywin32, comtypes, unidecode, psyco
  
 How to use
 ----------
 
-* register the OSD COM object with osd.py /regserver
+* register the OSD COM interface with osd.py /regserver
 * see miniplayer.py
 
 Limitations
