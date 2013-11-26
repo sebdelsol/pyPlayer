@@ -23,6 +23,6 @@ Dependencies
 How to use
 ----------
 
-* Register the com local server with osd.py /regserver
+* Register the OSD COM object with osd.py /regserver
 * see miniplayer.py
 
