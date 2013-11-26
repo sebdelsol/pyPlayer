@@ -38,10 +38,9 @@ comtypes.client.GetModule('DirectShow.tlb')
 from comtypes.gen.DirectShowLib import *
 
 comtypes.client.GetModule('dshow.tlb')
-#from comtypes.gen.DvdLib import *
 from comtypes.gen.DVDlib import *
 
-#comtypes.client.GetModule('quartz.dll')
+comtypes.client.GetModule('quartz.dll')
 from comtypes.gen.QuartzTypeLib import IMediaControl,IMediaEventEx,IVideoWindow,IBasicVideo2,IBasicAudio
 
 #---------------------------------------------------------------------------------------
@@ -1288,8 +1287,8 @@ if __name__ == "__main__":
         win32gui.PumpMessages()
 
     #---------------------------------------------------------------------------------------        
-    import psyco
-    psyco.bind(MiniPlayer)
+    #import psyco
+    #psyco.bind(MiniPlayer)
 
     PLAYFAVORITE = False
     favoriteFile = 'favorite.miniplayer'
