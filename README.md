@@ -3,11 +3,11 @@ pyPlayer
 
 Python directshow movie player
 
-* plays nearly every formats thanks to LAV filters and XYsubFilter
-* fullscreen exclusive mode thanks to madVR
+* plays nearly every formats with LAV filters and XYsubFilter
+* fullscreen exclusive mode with madVR
 * dvd support (with dvdNavigator filter on windows 7)
 * automatic aspect ratio
-* favorites
+* bookmarks
 * default languages
 * smooth and antialiased OSD
 * audio and subtitles tracks selection
