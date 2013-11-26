@@ -1296,8 +1296,8 @@ if __name__ == "__main__":
 
     window = MiniWindow(X,Y,W,H)
     
-    p = MiniPlayer(window)
-    window.setPlayer(p)
+    player = MiniPlayer(window)
+    window.setPlayer(player)
     
     favorite = None
     if PLAYFAVORITE :
@@ -1306,7 +1306,7 @@ if __name__ == "__main__":
 
     movieFile = ['movie1.avi','movie2.mkv']
 
-    p.playMovie(favorite,movieFile,0)
-    p.runMsgLoop(window.movieEnded)
+    player.playMovie(favorite,movieFile,0)
+    player.runMsgLoop(window.movieEnded)
     print 'EXIT'
     
