@@ -35,7 +35,7 @@ from ctypes.wintypes import INT,DWORD,LPCOLESTR,LPWSTR,LPCWSTR,LPCSTR,BOOL,HBITM
 comtypes.client.GetModule('DirectShow.tlb')
 from comtypes.gen.DirectShowLib import *
 
-comtypes.client.GetModule('dshow.tlb')
+comtypes.client.GetModule('dvd.tlb')
 from comtypes.gen.DVDlib import *
 
 comtypes.client.GetModule('quartz.dll')
