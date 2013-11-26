@@ -32,10 +32,10 @@ from comtypes import _ole32,IUnknown,IPersist,GUID,STDMETHOD,HRESULT
 from ctypes import POINTER,byref,cast,c_void_p,c_double,windll,c_longlong,CFUNCTYPE,create_string_buffer,pointer,c_long
 from ctypes.wintypes import INT,DWORD,LPCOLESTR,LPWSTR,LPCWSTR,LPCSTR,BOOL,HBITMAP,COLORREF,RECT,tagRECT
 
-comtypes.client.GetModule('DirectShow.tlb')
+comtypes.client.GetModule('.\\tlb\\DirectShow.tlb')
 from comtypes.gen.DirectShowLib import *
 
-comtypes.client.GetModule('dvd.tlb')
+comtypes.client.GetModule('.\\tlb\\dvd.tlb')
 from comtypes.gen.DVDlib import *
 
 comtypes.client.GetModule('quartz.dll')
