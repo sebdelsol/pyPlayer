@@ -37,4 +37,5 @@ Limitations
 * no fallback when the graph can't be build
 * no mouse handling
 * no filter choice (because those chosen are the best at the moment IMHO)
+* no DVD playlist
 * iso639-2 languages decoded in french only
