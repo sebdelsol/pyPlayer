@@ -15,8 +15,8 @@ Python directshow movie player
 * seamless seek in playlist
 * movie rotation
 * filter graph is registered in the ROT to be viewed with graphedit
-* multi threaded
-* could be embedded in any window
+* event loop is safe for multi-threading
+* ready to be embedded in any window
 
 Dependencies
 ------------
