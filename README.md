@@ -1,7 +1,7 @@
 pyPlayer
 ========
 
-Python directshow movie player
+Python directShow madVR movie player
 
 * plays nearly every formats with LAV filters
 * fullscreen exclusive mode with madVR
