@@ -566,7 +566,8 @@ class OSD(comtypes.COMObject):
                 print 'd3d Ressources Released'
 
     def ClearBackground(self,this,name,frameStart,fullOutputRect,activeVideoRect):
-        pass #self.device.Clear(0, None, D3DCLEAR.TARGET,  0x00000000, 1.0, 0)
+        if self.forceRedrawFlag:
+            return ERROR_EMPTY #madvr low latency mode
     
     def RenderOsd(self,this,name,frameStart,fullOutputRect,activeVideoRect):
         self.stateBlock.Apply()
@@ -574,6 +575,9 @@ class OSD(comtypes.COMObject):
         for button in self.buttons:
             if button.drawing : 
                 button.draw()
+
+        if self.forceRedrawFlag:
+            return ERROR_EMPTY #madvr low latency mode
 
     #initdone ?
     def isInitialized(self,this):
@@ -628,10 +632,12 @@ class OSD(comtypes.COMObject):
             self.forceRedrawFlag = forceRedrawFlag
 
     def run(self,this):
-        self.running = True
-        self.runThread = threading.Thread(target=self._run)
-        self.runThread.start()
+        pass #no need with madvr low latency mode since version 0.88.17
+        #self.running = True
+        #self.runThread = threading.Thread(target=self._run)
+        #self.runThread.start()
         
+    ''' #no need with madvr low latency mode since version 0.88.17
     def _run(self):
         print '----------\nOSD loop running\n----------'
         while self.running:
@@ -640,11 +646,12 @@ class OSD(comtypes.COMObject):
 
             time.sleep(0.02)
         print '----------\nOSD loop stopped\n----------'
+    '''
 
     def stop(self,this):
         self.forceRedrawFlag = False
-        self.running = False
-        self.runThread.join()
+        #self.running = False
+        #self.runThread.join()
         self.osdService = None
 
 if __name__ == "__main__": #osd.py /regserver
