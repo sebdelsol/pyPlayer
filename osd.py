@@ -650,7 +650,7 @@ class OSD(comtypes.COMObject):
 
     def stop(self,this):
         self.forceRedrawFlag = False
-        #self.running = False
+        #self.running = False #no need with madvr low latency mode since version 0.88.17
         #self.runThread.join()
         self.osdService = None
 
