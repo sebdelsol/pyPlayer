@@ -570,7 +570,7 @@ class OSD(comtypes.COMObject):
                 print 'd3d Ressources Released'
 
     def ClearBackground(self,this,name,frameStart,fullOutputRect,activeVideoRect):
-        return CALLBACK_USER_INTERFACE if not madVR_LOWLATENCY or self.hasBeenRedrawn else CALLBACK_INFO_DISPLAY
+        return CALLBACK_USER_INTERFACE if madVR_LOWLATENCY and self.hasBeenRedrawn else CALLBACK_INFO_DISPLAY
     
     def RenderOsd(self,this,name,frameStart,fullOutputRect,activeVideoRect):
         self.stateBlock.Apply()
@@ -581,7 +581,7 @@ class OSD(comtypes.COMObject):
                 self.hasBeenRedrawn = True 
                 button.draw()
         
-        return CALLBACK_USER_INTERFACE if not madVR_LOWLATENCY or self.hasBeenRedrawn else CALLBACK_INFO_DISPLAY
+        return CALLBACK_USER_INTERFACE if madVR_LOWLATENCY and self.hasBeenRedrawn else CALLBACK_INFO_DISPLAY
 
     #initdone ?
     def isInitialized(self,this):
