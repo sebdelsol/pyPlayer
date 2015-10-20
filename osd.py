@@ -49,6 +49,10 @@ ColorCursor = Color(0,34,70,96)
 ColorTemp = Color(0,0,0,0)
 
 #-------------------------------------------------------------------------------------------
+madVR_LOWLATENCY = True
+CALLBACK_EMPTY          = 4306L   #the render callback didn't do anything at all
+CALLBACK_INFO_DISPLAY   = 0L      #info display, doesn't need low latency
+CALLBACK_USER_INTERFACE = 77001L  #user interface, switches madVR into low latency mode
 REFERENCE_TIME = c_longlong
 
 class IOsdServices(IUnknown):
@@ -566,18 +570,18 @@ class OSD(comtypes.COMObject):
                 print 'd3d Ressources Released'
 
     def ClearBackground(self,this,name,frameStart,fullOutputRect,activeVideoRect):
-        if self.forceRedrawFlag:
-            return ERROR_EMPTY #madvr low latency mode
+        return CALLBACK_USER_INTERFACE if not madVR_LOWLATENCY or self.hasBeenRedrawn else CALLBACK_INFO_DISPLAY
     
     def RenderOsd(self,this,name,frameStart,fullOutputRect,activeVideoRect):
         self.stateBlock.Apply()
 
+        self.hasBeenRedrawn = False
         for button in self.buttons:
-            if button.drawing : 
+            if button.drawing :
+                self.hasBeenRedrawn = True 
                 button.draw()
-
-        if self.forceRedrawFlag:
-            return ERROR_EMPTY #madvr low latency mode
+        
+        return CALLBACK_USER_INTERFACE if not madVR_LOWLATENCY or self.hasBeenRedrawn else CALLBACK_INFO_DISPLAY
 
     #initdone ?
     def isInitialized(self,this):
@@ -626,18 +630,18 @@ class OSD(comtypes.COMObject):
         self.nbFiles,self.fileIndex = nbFiles,fileIndex
         self.osdService = osdService
         self.forceRedrawFlag = False
+        self.hasBeenRedrawn = False
 
     def forceRedraw(self,this,forceRedrawFlag):
         if self.deviceInitialized:
             self.forceRedrawFlag = forceRedrawFlag
 
     def run(self,this):
-        pass #no need with madvr low latency mode since version 0.88.17
-        #self.running = True
-        #self.runThread = threading.Thread(target=self._run)
-        #self.runThread.start()
+        self.running = True
+        if not madVR_LOWLATENCY:
+            self.runThread = threading.Thread(target=self._run)
+            self.runThread.start()
         
-    ''' #no need with madvr low latency mode since version 0.88.17
     def _run(self):
         print '----------\nOSD loop running\n----------'
         while self.running:
@@ -646,12 +650,12 @@ class OSD(comtypes.COMObject):
 
             time.sleep(0.02)
         print '----------\nOSD loop stopped\n----------'
-    '''
 
     def stop(self,this):
         self.forceRedrawFlag = False
-        #self.running = False #no need with madvr low latency mode since version 0.88.17
-        #self.runThread.join()
+        self.running = False
+        if not madVR_LOWLATENCY:
+            self.runThread.join()
         self.osdService = None
 
 if __name__ == "__main__": #osd.py /regserver
