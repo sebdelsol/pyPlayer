@@ -58,9 +58,9 @@ class IPersistMemory(IPersist):
     _iid_ = GUID('{BD1AE5E0-A6AE-11CE-BD37-504200C10000}')
     _methods_ = [
         STDMETHOD(HRESULT, 'IsDirty',[]),
-        STDMETHOD(HRESULT, 'Load',[c_void_p,c_ulong]),
-        STDMETHOD(HRESULT, 'Save',[c_void_p,c_int,c_ulong]),
-        STDMETHOD(HRESULT, 'GetSizeMax',[POINTER(c_ulong)])
+        STDMETHOD(HRESULT, 'Load', [c_void_p, c_ulong]),
+        STDMETHOD(HRESULT, 'Save', [c_void_p, c_int, c_ulong]),
+        STDMETHOD(HRESULT, 'GetSizeMax', [POINTER(c_ulong)])
     ]
 #-------------------------------------------------------------------------------
 NULL = c_void_p
@@ -71,20 +71,20 @@ ShaderStage_PostScale = 1
 class IOsdServices(IUnknown):
     _iid_ = GUID('{3AE03A88-F613-4BBA-AD3E-EE236976BF9A}')
     _methods_ = [
-                    STDMETHOD(HRESULT, 'OsdSetBitmap',[LPCSTR,HBITMAP,NULL,COLORREF,INT,INT,BOOL,INT,DWORD,NULL,NULL,NULL,NULL])#STDMETHOD(OsdSetBitmap)(LPCSTR name,HBITMAP leftEye = NULL,HBITMAP rightEye = NULL,COLORREF colorKey = 0,int posX = 0,int posY = 0,bool posRelativeToVideoRect = false,int zOrder = 0,DWORD duration = 0,DWORD flags = 0,OSDMOUSECALLBACK callback = NULL,LPVOID callbackContext = NULL,LPVOID reserved = NULL)
+                    STDMETHOD(HRESULT, 'OsdSetBitmap', [LPCSTR, HBITMAP, NULL, COLORREF, INT, INT,BOOL, INT, DWORD, NULL NULL, NULL, NULL])#STDMETHOD(OsdSetBitmap)(LPCSTR name,HBITMAP leftEye = NULL,HBITMAP rightEye = NULL,COLORREF colorKey = 0,int posX = 0,int posY = 0,bool posRelativeToVideoRect = false,int zOrder = 0,DWORD duration = 0,DWORD flags = 0,OSDMOUSECALLBACK callback = NULL,LPVOID callbackContext = NULL,LPVOID reserved = NULL)
                 ]
 
 class IMadVRExternalPixelShaders(IUnknown):
     _iid_ = GUID('{B6A6D5D4-9637-4C7D-AAAE-BC0B36F5E433}')
     _methods_ = [
-                    STDMETHOD(HRESULT, 'ClearPixelShaders',[c_long]),#STDMETHOD(ClearPixelShaders)(int stage)
-                    STDMETHOD(HRESULT, 'AddPixelShader',[LPCSTR, LPCSTR, c_long, c_long])#STDMETHOD(AddPixelShader)(LPCSTR sourceCode, LPCSTR compileProfile, int stage, LPVOID reserved)
+                    STDMETHOD(HRESULT, 'ClearPixelShaders', [c_long]),#STDMETHOD(ClearPixelShaders)(int stage)
+                    STDMETHOD(HRESULT, 'AddPixelShader', [LPCSTR, LPCSTR, c_long, c_long])#STDMETHOD(AddPixelShader)(LPCSTR sourceCode, LPCSTR compileProfile, int stage, LPVOID reserved)
                 ]
 
 class IMadVRExclusiveModeControl(IUnknown):
     _iid_ = GUID('{88A69329-3CD3-47D6-ADEF-89FA23AFC7F3}')
     _methods_ = [
-                    STDMETHOD(HRESULT, 'DisableExclusiveMode',[BOOL])
+                    STDMETHOD(HRESULT, 'DisableExclusiveMode', [BOOL])
                 ]
 
 from OSD import IOsdRenderCallback
@@ -92,9 +92,9 @@ from OSD import IOsdRenderCallback
 class IOsdServices(IUnknown):
     _iid_ = GUID('{3AE03A88-F613-4BBA-AD3E-EE236976BF9A}')
     _methods_ = [
-                    STDMETHOD(HRESULT, 'OsdSetBitmap',[LPCSTR, HBITMAP, NULL, COLORREF, INT, INT ,BOOL, INT, DWORD, NULL, NULL ,NULL, NULL]),#STDMETHOD(OsdSetBitmap)(LPCSTR name,HBITMAP leftEye = NULL,HBITMAP rightEye = NULL,COLORREF colorKey = 0,int posX = 0,int posY = 0,bool posRelativeToVideoRect = false,int zOrder = 0,DWORD duration = 0,DWORD flags = 0,OSDMOUSECALLBACK callback = NULL,LPVOID callbackContext = NULL,LPVOID reserved = NULL)
-                    STDMETHOD(HRESULT, 'OsdGetVideoRects',[POINTER(RECT), POINTER(RECT)]),
-                    STDMETHOD(HRESULT, 'OsdSetRenderCallback',[LPCSTR, POINTER(IOsdRenderCallback), NULL]),
+                    STDMETHOD(HRESULT, 'OsdSetBitmap', [LPCSTR, HBITMAP, NULL, COLORREF, INT, INT ,BOOL, INT, DWORD, NULL, NULL ,NULL, NULL]),#STDMETHOD(OsdSetBitmap)(LPCSTR name,HBITMAP leftEye = NULL,HBITMAP rightEye = NULL,COLORREF colorKey = 0,int posX = 0,int posY = 0,bool posRelativeToVideoRect = false,int zOrder = 0,DWORD duration = 0,DWORD flags = 0,OSDMOUSECALLBACK callback = NULL,LPVOID callbackContext = NULL,LPVOID reserved = NULL)
+                    STDMETHOD(HRESULT, 'OsdGetVideoRects', [POINTER(RECT), POINTER(RECT)]),
+                    STDMETHOD(HRESULT, 'OsdSetRenderCallback', [LPCSTR, POINTER(IOsdRenderCallback), NULL]),
                     STDMETHOD(HRESULT, 'OsdRedrawFrame', [])
                 ]
 
