@@ -4,7 +4,7 @@ REALSEEKER = False
 #---------------------------------------------------------------------------------------
 import gc
 import os
-import win32con,win32gui,win32event,win32api
+import win32con ,win32gui ,win32event win32api
 import msvcrt
 import math
 import datetime
@@ -28,9 +28,9 @@ import sys
 sys.coinit_flags = 0#comtypes.COINIT_MULTITHREADED
 
 import comtypes.client
-from comtypes import _ole32,IUnknown,IPersist,GUID,STDMETHOD,HRESULT
-from ctypes import POINTER,byref,cast,c_void_p,c_double,windll,c_longlong,CFUNCTYPE,create_string_buffer,pointer,c_long
-from ctypes.wintypes import INT,DWORD,LPCOLESTR,LPWSTR,LPCWSTR,LPCSTR,BOOL,HBITMAP,COLORREF,RECT,tagRECT
+from comtypes import _ole32, IUnknown, IPersist, GUID, STDMETHOD,HRESULT
+from ctypes import POINTER, byref, cast, c_void_p, c_double, windll, c_longlong ,CFUNCTYPE, create_string_buffer, pointer,c_long
+from ctypes.wintypes import INT, DWORD, LPCOLESTR, LPWSTR, LPCWSTR, LPCSTR ,BOOL, HBITMAP, COLORREF, RECT, tagRECT
 
 comtypes.client.GetModule('.\\tlb\\DirectShow.tlb')
 from comtypes.gen.DirectShowLib import *
@@ -39,7 +39,7 @@ comtypes.client.GetModule('.\\tlb\\dvd.tlb')
 from comtypes.gen.DVDlib import *
 
 comtypes.client.GetModule('quartz.dll')
-from comtypes.gen.QuartzTypeLib import IMediaControl,IMediaEventEx,IVideoWindow,IBasicVideo2,IBasicAudio
+from comtypes.gen.QuartzTypeLib import IMediaControl, IMediaEventEx ,IVideoWindow ,IBasicVideo2, IBasicAudio
 
 #---------------------------------------------------------------------------------------
 LOG = False
@@ -48,8 +48,8 @@ AUDIODELAY = 0
 UsePSYCO = True
 0
 #---------------------------------------------------------------------------------------
-from OSD import osdPlay,osdTimeline,osdVol,osdBattery,osdLocalTime,osdAudio,osdSrt
-from OSD import stateFWD,stateRWD,statePAUSE,statePLAY,labelsSEPARATOR
+from OSD import osdPlay, osdTimeline osdVol, osdBattery ,osdLocalTime ,osdAudio ,osdSrt
+from OSD import stateFWD, stateRWD ,statePAUSE, statePLAY ,labelsSEPARATOR
 seekRWD, seekFWD = stateRWD, stateFWD
 
 #-------------------------------------------------------------------------------
