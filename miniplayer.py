@@ -39,7 +39,7 @@ comtypes.client.GetModule('.\\tlb\\dvd.tlb')
 from comtypes.gen.DVDlib import *
 
 comtypes.client.GetModule('quartz.dll')
-from comtypes.gen.QuartzTypeLib import IMediaControl, IMediaEventEx ,IVideoWindow ,IBasicVideo2, IBasicAudio
+from comtypes.gen.QuartzTypeLib import IMediaControl, IMediaEventEx, IVideoWindow, IBasicVideo2, IBasicAudio
 
 #---------------------------------------------------------------------------------------
 LOG = False
