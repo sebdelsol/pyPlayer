@@ -53,7 +53,7 @@ from OSD import stateFWD, stateRWD, statePAUSE, statePLAY, labelsSEPARATOR
 seekRWD, seekFWD = stateRWD, stateFWD
 
 #-------------------------------------------------------------------------------
-from ctypes import c_ulong,c_int
+from ctypes import c_ulong, c_int
 class IPersistMemory(IPersist):
     _iid_ = GUID('{BD1AE5E0-A6AE-11CE-BD37-504200C10000}')
     _methods_ = [
@@ -78,7 +78,7 @@ class IMadVRExternalPixelShaders(IUnknown):
     _iid_ = GUID('{B6A6D5D4-9637-4C7D-AAAE-BC0B36F5E433}')
     _methods_ = [
                     STDMETHOD(HRESULT, 'ClearPixelShaders',[c_long]),#STDMETHOD(ClearPixelShaders)(int stage)
-                    STDMETHOD(HRESULT, 'AddPixelShader',[LPCSTR ,LPCSTR ,c_long,c_long])#STDMETHOD(AddPixelShader)(LPCSTR sourceCode, LPCSTR compileProfile, int stage, LPVOID reserved)
+                    STDMETHOD(HRESULT, 'AddPixelShader',[LPCSTR, LPCSTR, c_long, c_long])#STDMETHOD(AddPixelShader)(LPCSTR sourceCode, LPCSTR compileProfile, int stage, LPVOID reserved)
                 ]
 
 class IMadVRExclusiveModeControl(IUnknown):
@@ -101,16 +101,16 @@ class IOsdServices(IUnknown):
 class IMadVRSettings(IUnknown):
     _iid_ = GUID('{6F8A566C-4E19-439E-8F07-20E46ED06DEE}')
     _methods_ = [
-                  STDMETHOD(BOOL, 'SettingsGetRevision',[POINTER(c_longlong)]),#(LONGLONG* revision) = 0;
-                  STDMETHOD(BOOL, 'SettingsExport',[POINTER(c_void_p), POINTER(INT)]),#(LPVOID* buf, int* size) = 0;
-                  STDMETHOD(BOOL, 'SettingsImport',[c_void_p, INT]),#(LPVOID buf, int size) = 0;
-                  STDMETHOD(BOOL, 'SettingsSetString',[LPCWSTR, LPCWSTR]),#(LPCWSTR path, LPCWSTR value) = 0;
-                  STDMETHOD(BOOL, 'SettingsSetInteger',[LPCWSTR, INT]),#(LPCWSTR path, int     value) = 0;
-                  STDMETHOD(BOOL, 'SettingsSetBoolean',[LPCWSTR, BOOL]),#(LPCWSTR path, BOOL    value) = 0;
-                  STDMETHOD(BOOL, 'SettingsGetString',[LPCWSTR, LPCWSTR, POINTER(INT)]),#(LPCWSTR path, LPCWSTR value, int* bufLenInChars) = 0;
-                  STDMETHOD(BOOL, 'SettingsGetInteger',[LPCWSTR, POINTER(INT)]),#(LPCWSTR path, int*    value) = 0;
-                  STDMETHOD(BOOL, 'SettingsGetBoolean',[LPCWSTR, POINTER(BOOL)]),#(LPCWSTR path, BOOL*   value) = 0;
-                  STDMETHOD(BOOL, 'SettingsGetBinary',[LPCWSTR, POINTER(c_void_p), POINTER(INT)])#(LPCWSTR path, LPVOID* value, int* bufLenInBytes) = 0;
+                  STDMETHOD(BOOL, 'SettingsGetRevision', [POINTER(c_longlong)]),#(LONGLONG* revision) = 0;
+                  STDMETHOD(BOOL, 'SettingsExport', [POINTER(c_void_p), POINTER(INT)]),#(LPVOID* buf, int* size) = 0;
+                  STDMETHOD(BOOL, 'SettingsImport', [c_void_p, INT]),#(LPVOID buf, int size) = 0;
+                  STDMETHOD(BOOL, 'SettingsSetString', [LPCWSTR, LPCWSTR]),#(LPCWSTR path, LPCWSTR value) = 0;
+                  STDMETHOD(BOOL, 'SettingsSetInteger', [LPCWSTR, INT]),#(LPCWSTR path, int     value) = 0;
+                  STDMETHOD(BOOL, 'SettingsSetBoolean', [LPCWSTR, BOOL]),#(LPCWSTR path, BOOL    value) = 0;
+                  STDMETHOD(BOOL, 'SettingsGetString', [LPCWSTR, LPCWSTR, POINTER(INT)]),#(LPCWSTR path, LPCWSTR value, int* bufLenInChars) = 0;
+                  STDMETHOD(BOOL, 'SettingsGetInteger', [LPCWSTR, POINTER(INT)]),#(LPCWSTR path, int*    value) = 0;
+                  STDMETHOD(BOOL, 'SettingsGetBoolean', [LPCWSTR, POINTER(BOOL)]),#(LPCWSTR path, BOOL*   value) = 0;
+                  STDMETHOD(BOOL, 'SettingsGetBinary', [LPCWSTR, POINTER(c_void_p), POINTER(INT)])#(LPCWSTR path, LPVOID* value, int* bufLenInBytes) = 0;
                 ]
 
 #---------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ class MiniPlayer(object):
                     reclock =       '{9DC15360-914C-46B8-B9DF-BFE67FD36C6A}'
                     )
     
-    videoFilters = ('LavVideo','LavAudio','XYSubFilter','reclock')
+    videoFilters = ('LavVideo', 'LavAudio', 'XYSubFilter', 'reclock')
     filterGraphName = 'FilterGraph miniPlayer'
     TicksInSec = 1000*1000*10. #1 tick = 100 ns
 
@@ -336,7 +336,7 @@ class MiniPlayer(object):
 
         self.setAspectRatio()
 
-    def setAspectRatio(self,ratio=None, setWindowPos=True):
+    def setAspectRatio(self, ratio=None, setWindowPos=True):
         with self.ChangeAspectRatioLock:
             screenW,screenH = self.size
     
@@ -370,7 +370,7 @@ class MiniPlayer(object):
         return vAttr.ulAspectX,vAttr.ulAspectY
 
     #---------------------------------------------------------------------------------------
-    def playMovie(self, favorite,files, angle=0, forceFrench=False, isVideo=False):
+    def playMovie(self, favorite, files, angle=0, forceFrench=False, isVideo=False):
 
         self.angle = angle%360
         self.isVideo = isVideo
@@ -514,7 +514,7 @@ class MiniPlayer(object):
         return tagDVD_HMSF_TIMECODE(h ,m, s, 0)
 
     def HMS2Pos(self,hms):
-        return int(round((hms.bHours*3600+hms.bMinutes*60+hms.bSeconds) * self.TicksInSec))
+        return int(round((hms.bHours*3600 + hms.bMinutes*60 + hms.bSeconds) * self.TicksInSec))
 
     def getPosAndDuration(self):
         return (self.getPos(), self.getDuration()) if self.dvd else self.seeking.GetPositions()
@@ -536,7 +536,7 @@ class MiniPlayer(object):
     DVDminTimeBeforeNextSeek = .7 # to prevent too close DVD seeks that would hangs
 
     def seek(self, state):
-        if self.dvd and time.time()-self.lastStopTime <self.DVDminTimeBeforeNextSeek:
+        if self.dvd and time.time()-self.lastStopTime < self.DVDminTimeBeforeNextSeek:
             return
         
         if state in (stateFWD, stateRWD):
@@ -639,7 +639,7 @@ class MiniPlayer(object):
     defaultDelay = 1 #s
     
     def initOsd(self):
-        self.renderCallback = comtypes.CoCreateInstance(IOsdRenderCallback._iid_, IOsdRenderCallback,comtypes.CLSCTX_INPROC_SERVER)
+        self.renderCallback = comtypes.CoCreateInstance(IOsdRenderCallback._iid_, IOsdRenderCallback, comtypes.CLSCTX_INPROC_SERVER)
 
     def runOsd(self):
         w,h = self.size
@@ -681,8 +681,8 @@ class MiniPlayer(object):
         self.col = 0
 
         self.hideAllOSDExceptAudioSrt()
-        self.showAudioSrt(osdAudio,'Audio',[s.name for s in self.audio], self.audioIndex, self.col==0)
-        self.showAudioSrt(osdSrt,'Sous-titres',[s.name for s in self.srt], self.srtIndex, self.col==1)
+        self.showAudioSrt(osdAudio, 'Audio', [s.name for s in self.audio], self.audioIndex, self.col==0)
+        self.showAudioSrt(osdSrt, 'Sous-titres', [s.name for s in self.srt], self.srtIndex, self.col==1)
         self.pause()
 
     def endSelectAudioSrt(self, select):
@@ -756,14 +756,14 @@ class MiniPlayer(object):
             name = unidecode.unidecode(self.name.lower())
             
             if self.isSrt():
-                for srch in ('force','forzado'): # "forced" in french, english, spanish
+                for srch in ('force', 'forzado'): # "forced" in french, english, spanish
                     if srch in name:
                         forced = u'(Forcé)'
                         break
                     
             words = re.findall(r'\b\S+\b', name)
             for abr in (w for w in words if len(w)==3): #3 letters words are potentially an ISO 639-2 language code
-                lang = iso639.langs.get(abr,None)
+                lang = iso639.langs.get(abr, None)
                 if lang is not None: #assume that the first one is a valid language code
                     self.name = '%s %s'%(lang.capitalize(), forced)
                     return 
@@ -793,7 +793,7 @@ class MiniPlayer(object):
     class dvdTrack(object):
         def getLang(self, lcid):
             name = LPWSTR(' '*255)
-            getLocaleInfo(lcid, LOCALE_SLOCALIZEDLANGUAGENAME,name,255)
+            getLocaleInfo(lcid, LOCALE_SLOCALIZEDLANGUAGENAME, name, 255)
             return name.value
 
         def release(self): pass
@@ -930,7 +930,7 @@ class MiniPlayer(object):
     def getVolume(self):
         vol = self.basicAudio.Volume
         vol = self.dampVol * (math.exp(-math.log(self.cVol-vol/(self.kVol),10))-1)
-        self.vol = round(vol,1)
+        self.vol = round(vol, 1)
         return self.vol
     '''
 
@@ -1036,14 +1036,14 @@ class MiniPlayer(object):
     ROOTKEY = win32con.HKEY_CURRENT_USER
     LAVPATH = r'Software\LAV'
     
-    def setRegKey(self,root,path,key,rtype,value):
+    def setRegKey(self, root, path, key, rtype, value):
         try:
-            hKey = win32api.RegOpenKey(root, path,0,win32con.KEY_ALL_ACCESS)
+            hKey = win32api.RegOpenKey(root, path, 0, win32con.KEY_ALL_ACCESS)
             win32api.RegSetValueEx(hKey, key, 0, rtype, value)        
         except:
-            print u"ERROR, can't access REG %s\\%s"%(path,key)
+            print u"ERROR, can't access REG %s\\%s" %(path, key)
 
-    def setLAVvideoHWAccel(self,accel):
+    def setLAVvideoHWAccel(self, accel):
         path = self.LAVPATH + r"\Video\HWAccel"
         key = r"HWAccel"
         rtype = win32con.REG_DWORD
@@ -1217,7 +1217,7 @@ if __name__ == "__main__":
 
     #---------------------------------------------------------------------------------------
     class MiniWindow:
-        def __init__(self,x,y,w,h):
+        def __init__(self, x,y, w,h):
             self.player = None
             self.size = w,h
             
@@ -1247,7 +1247,7 @@ if __name__ == "__main__":
             print angle
             if favorite is not None:
                 with open(favoriteFile,'wb') as f:
-                    pickle.dump(favorite,f,-1)
+                    pickle.dump(favorite, f, -1)
 
         def onDestroy(self, hwnd, message, wparam, lparam):
             win32gui.PostQuitMessage(0)
@@ -1258,7 +1258,7 @@ if __name__ == "__main__":
             return True
 
         def onkeyUp(self,hwnd, msg, wparam, lparam):
-            self.handleKeys(wparam,False)
+            self.handleKeys(wparam, False)
             return True
         
         def getHwnd(self):
@@ -1267,7 +1267,7 @@ if __name__ == "__main__":
         def getSize(self):
             return self.size
 
-        VK_LEFT,VK_UP,VK_RIGHT,VK_DOWN,VK_SPACE,VK_ESCAPE,VK_BACK,VK_NUMPAD0,VK_DELETE = 0x25,0x26,0x27,0x28,0x20,0x1B,0x08,0x60,0x2e
+        VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN, VK_SPACE, VK_ESCAPE, VK_BACK, VK_NUMPAD0, VK_DELETE = 0x25, 0x26, 0x27, 0x28, 0x20, 0x1B, 0x08, 0x60, 0x2e
 
         cmds = {VK_SPACE:'select', VK_BACK:'back', VK_ESCAPE : 'close' , VK_DELETE : 'close', ord('S'):'lang', VK_NUMPAD0:'lang',
                 VK_UP:'up', VK_DOWN:'down', VK_LEFT: 'left', VK_RIGHT :'right'}
