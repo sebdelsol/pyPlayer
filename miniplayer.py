@@ -146,7 +146,7 @@ class MiniPlayer(object):
     filterGraphName = 'FilterGraph miniPlayer'
     TicksInSec = 1000*1000*10. #1 tick = 100 ns
 
-    def __init__(self,window):
+    def __init__(self, window):
         self.hwnd = window.getHwnd()
         self.size = window.getSize()
         self.getBattery = None
@@ -154,7 +154,7 @@ class MiniPlayer(object):
         self.setLAVvideoHWAccel(HWACCEL) 
         self.setLAVaudioDelay(AUDIODELAY)
 
-        self.fg  = comtypes.CoCreateInstance(FilterGraph._reg_clsid_, IGraphBuilder,comtypes.CLSCTX_INPROC_SERVER)
+        self.fg  = comtypes.CoCreateInstance(FilterGraph._reg_clsid_, IGraphBuilder, comtypes.CLSCTX_INPROC_SERVER)
         
         self.control =      self.fg.QueryInterface(IMediaControl)
         self.event =        self.fg.QueryInterface(IMediaEventEx)
@@ -183,19 +183,19 @@ class MiniPlayer(object):
     def setDvdOptions(self):
         self.dvdControl.SetOption(DVD_HMSF_TimeCodeEvents, 1)
         self.dvdControl.SetOption(DVD_ResetOnStop, 0)
-        self.dvdControl.SetOption(DVD_DisableStillThrottle,1)
-        self.dvdControl.SetOption(DVD_EnableStreaming,1)
-        self.dvdControl.SetOption(DVD_EnablePortableBookmarks,1)
+        self.dvdControl.SetOption(DVD_DisableStillThrottle, 1)
+        self.dvdControl.SetOption(DVD_EnableStreaming, 1)
+        self.dvdControl.SetOption(DVD_EnablePortableBookmarks, 1)
 
-    def createFilter(self,filterName):
+    def createFilter(self, filterName):
         clsid = GUID(self.filters[filterName])
         f = comtypes.CoCreateInstance(clsid, IBaseFilter,comtypes.CLSCTX_INPROC_SERVER)
         self.fg.AddFilter(f,LPCWSTR(filterName))
         return f
 
-    def getFilterName(self,f):
+    def getFilterName(self, f):
         i = f.QueryFilterInfo()
-        name = cast(i.achName,LPCWSTR)
+        name = cast(i.achName, LPCWSTR)
         return name.value
 
     def buildFiltergraph(self):
@@ -286,10 +286,10 @@ class MiniPlayer(object):
             lcidFRE, lcidENG = 0x040c, 0x0409 
             self.dvdControl.SelectDefaultMenuLanguage(lcidFRE)
             if self.forceFrench:
-                self.dvdControl.SelectDefaultAudioLanguage(lcidFRE,DVD_AUD_EXT_NotSpecified)
+                self.dvdControl.SelectDefaultAudioLanguage(lcidFRE, DVD_AUD_EXT_NotSpecified)
             else:
-                self.dvdControl.SelectDefaultAudioLanguage(lcidENG,DVD_AUD_EXT_NotSpecified)
-                self.dvdControl.SelectDefaultSubpictureLanguage(lcidFRE,DVD_SP_EXT_NotSpecified)
+                self.dvdControl.SelectDefaultAudioLanguage(lcidENG, DVD_AUD_EXT_NotSpecified)
+                self.dvdControl.SelectDefaultSubpictureLanguage(lcidFRE, DVD_SP_EXT_NotSpecified)
         else:
             self.setLAVsubtitlesPref(self.forceFrench)
     
@@ -298,29 +298,29 @@ class MiniPlayer(object):
         while True:
             try:
                 evCode,evParam1,evParam2 = self.event.GetEvent(0)
-                self.event.FreeEventParams(evCode,evParam1,evParam2)
+                self.event.FreeEventParams(evCode, evParam1, evParam2)
                 #print 'GRAPH event %s %s %s'%(hex(evCode),hex(evParam1),hex(evParam2))
                 
-                if evCode in (EC_USERABORT,EC_ERRORABORT):
+                if evCode in (EC_USERABORT, EC_ERRORABORT):
                     print 'EC_ABORT'
-                    self.movieEnded(False,None) #not viewed !
+                    self.movieEnded(False, None) #not viewed !
 
                 elif evCode==EC_COMPLETE:
                     print 'EC_COMPLETE'
                     if self.needSeekInPlaylist(seekFWD):
-                        self.movieEnded(None,None,seekFWD)
+                        self.movieEnded(None, None, seekFWD)
                     else:
-                        self.movieEnded(True,None) #viewed
+                        self.movieEnded(True, None) #viewed
                 
                 elif evCode==EC_VIDEO_SIZE_CHANGED :
                     ratio = evParam1&0xffff , evParam1>>16
                     print 'change ivideowindow size %dx%d'%ratio
-                    self.setAspectRatio(ratio=ratio,setWindowPos=False)
+                    self.setAspectRatio(ratio=ratio, setWindowPos=False)
                     
                 elif evCode==EC_DVD_DOMAIN_CHANGE:
                     print 'change DVD domain'
                     ratio = self.getAspectRatioDvd()
-                    self.setAspectRatio(ratio=ratio,setWindowPos=False)
+                    self.setAspectRatio(ratio=ratio, setWindowPos=False)
                    
             except: break
 
@@ -336,7 +336,7 @@ class MiniPlayer(object):
 
         self.setAspectRatio()
 
-    def setAspectRatio(self,ratio=None,setWindowPos=True):
+    def setAspectRatio(self,ratio=None, setWindowPos=True):
         with self.ChangeAspectRatioLock:
             screenW,screenH = self.size
     
@@ -363,14 +363,14 @@ class MiniPlayer(object):
                 self.basicVideo.SetDestinationPosition(leftMargin, 0, adjustedW, screenH)
     
             if setWindowPos:
-                self.videoWindow.SetWindowPosition(0,0,screenW,screenH)
+                self.videoWindow.SetWindowPosition(0, 0, screenW, screenH)
 
     def getAspectRatioDvd(self):
         vAttr = self.dvdInfo.GetCurrentVideoAttributes()
         return vAttr.ulAspectX,vAttr.ulAspectY
 
     #---------------------------------------------------------------------------------------
-    def playMovie(self,favorite,files,angle=0,forceFrench=False,isVideo=False):
+    def playMovie(self, favorite,files, angle=0, forceFrench=False, isVideo=False):
 
         self.angle = angle%360
         self.isVideo = isVideo
@@ -386,8 +386,8 @@ class MiniPlayer(object):
         self.ready = True
         print 'MiniPlayer ready'
 
-    def playFiles(self,files):
-        self.files = files if isinstance(files,(list,tuple)) else [files]
+    def playFiles(self, files):
+        self.files = files if isinstance(files, (list, tuple)) else [files]
         self.fileIndex = 0
 
         self.buildFiltergraph()
@@ -401,7 +401,7 @@ class MiniPlayer(object):
                 print "can't acces menu, hresult %s"%hex(0xffffffff+e.hresult) 
 
     #---------------------------------------------------------------------------------------
-    def seekInPlaylist(self,seek): #won't work with DVD playlist!
+    def seekInPlaylist(self, seek): #won't work with DVD playlist!
         with self.buildingFiltergraph:
             self.fileIndex += seek
             print '-----------------------------\nPlay File index %s in playlist'%self.fileIndex
@@ -413,11 +413,11 @@ class MiniPlayer(object):
             self.ready = True
             print 'seek in Playlist done'
 
-    def needSeekInPlaylist(self,seek):
+    def needSeekInPlaylist(self, seek):
         return 0<= self.fileIndex + seek <len(self.files)
 
     #---------------------------------------------------------------------------------------
-    def playFavorite(self,favorite):
+    def playFavorite(self, favorite):
         if len(favorite)==2:
             files,dvdstateData = favorite
 
@@ -429,13 +429,13 @@ class MiniPlayer(object):
 
             dvdState = self.dvdInfo.GetState()
             persist = dvdState.QueryInterface(IPersistMemory)
-            loadBuffer = create_string_buffer(dvdstateData,len(dvdstateData))
-            persist.Load(cast(loadBuffer, c_void_p),len(loadBuffer))
+            loadBuffer = create_string_buffer(dvdstateData, len(dvdstateData))
+            persist.Load(cast(loadBuffer, c_void_p), len(loadBuffer))
 
-            self.dvdControl.SetState(dvdState,DVD_CMD_FLAG_Block | DVD_CMD_FLAG_Flush)
+            self.dvdControl.SetState(dvdState, DVD_CMD_FLAG_Block | DVD_CMD_FLAG_Flush)
 
         else:
-            files,fileIndex,pos,audioIndex,srtIndex = favorite
+            files, fileIndex, pos, audioIndex, srtIndex = favorite
 
             self.files = files
             self.fileIndex = fileIndex
@@ -469,7 +469,7 @@ class MiniPlayer(object):
             self.getAUDIOSRT()
             pos = self.getPos()
             #title = self.dvdInfo.GetCurrentLocation().TitleNum if self.dvd else None
-            return self.files,self.fileIndex,pos,self.audioIndex,self.srtIndex
+            return self.files, self.fileIndex, pos, self.audioIndex, self.srtIndex
 
     def isViewed(self):
         BEFOREendOfMOvie = 15*60
@@ -480,9 +480,9 @@ class MiniPlayer(object):
                 pos,dur = self.getPosAndDuration()
                 posSec = pos/self.TicksInSec
                 totalSec = dur/self.TicksInSec
-                viewSec = max(totalSec-BEFOREendOfMOvie,totalSec*PERCENTviewed)
+                viewSec = max(totalSec-BEFOREendOfMOvie, totalSec*PERCENTviewed)
                 isViewed = posSec>viewSec
-                print 'Viewed %s (pos:%is,view:%s,total:%ss)'%(isViewed,posSec,viewSec,totalSec)
+                print 'Viewed %s (pos:%is,view:%s,total:%ss)' %(isViewed, posSec, viewSec, totalSec)
             except : pass
         return isViewed
 
@@ -495,11 +495,11 @@ class MiniPlayer(object):
             isViewed = self.isViewed()
             favorite = self.getFavorite()
        
-        self.movieEnded(isViewed,favorite)
+        self.movieEnded(isViewed, favorite)
 
-    def movieEnded(self,viewed,favorite,seek=None):
+    def movieEnded(self, viewed, favorite, seek=None):
         angle = self.angle if self.isVideo else 0
-        self.stopMsgLoop(viewed,favorite,angle,seek) #so that a possible call to seekInPLaylist would be in the msg loop thread (buildgraph thread too!)
+        self.stopMsgLoop(viewed, favorite, angle, seek) #so that a possible call to seekInPLaylist would be in the msg loop thread (buildgraph thread too!)
 
     def forceClose(self):
         print 'Force CLOSE miniplayer'
@@ -507,14 +507,14 @@ class MiniPlayer(object):
             self.close()
 
     #---------------------------------------------------------------------------------------
-    def Pos2HMS(self,seconds):
+    def Pos2HMS(self, seconds):
         seconds = int(round(seconds/self.TicksInSec))
         m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)
-        return tagDVD_HMSF_TIMECODE(h,m,s,0)
+        return tagDVD_HMSF_TIMECODE(h ,m, s, 0)
 
     def HMS2Pos(self,hms):
-        return int(round((hms.bHours*3600+hms.bMinutes*60+hms.bSeconds)*self.TicksInSec))
+        return int(round((hms.bHours*3600+hms.bMinutes*60+hms.bSeconds) * self.TicksInSec))
 
     def getPosAndDuration(self):
         return (self.getPos(), self.getDuration()) if self.dvd else self.seeking.GetPositions()
@@ -535,11 +535,11 @@ class MiniPlayer(object):
         
     DVDminTimeBeforeNextSeek = .7 # to prevent too close DVD seeks that would hangs
 
-    def seek(self,state):
+    def seek(self, state):
         if self.dvd and time.time()-self.lastStopTime <self.DVDminTimeBeforeNextSeek:
             return
         
-        if state in (stateFWD,stateRWD):
+        if state in (stateFWD, stateRWD):
             self.pause()
 
             if state != self.lastState: # start seeking
@@ -547,12 +547,12 @@ class MiniPlayer(object):
                 print 'SEEK BEGIN duration %s'%self.duration
             
             pos = self.renderCallback.getCurrentPos()
-            pos = max(0,min(pos,self.duration))
+            pos = max(0, min(pos, self.duration))
 
-            if pos in (0,self.duration):
+            if pos in (0, self.duration):
                 if self.needSeekInPlaylist(state):
                     self.doSeek(pos)
-                    self.movieEnded(None,None,seek=state) #-1 RWD, 1 FWD
+                    self.movieEnded(None, None, seek=state) #-1 RWD, 1 FWD
                     return
 
             if REALSEEKER:
@@ -569,7 +569,7 @@ class MiniPlayer(object):
             
             if pos == self.duration and not self.needSeekInPlaylist(seekFWD) and not self.dvd:
                 #exit right after the user release the seek button, except for DVD where we're not sure it's the main VOB
-                self.movieEnded(True,None)
+                self.movieEnded(True, None)
                 return
             else:
                 self.doSeek(pos)
@@ -578,7 +578,7 @@ class MiniPlayer(object):
 
         self.lastState = state
 
-    def doSeek(self,pos):
+    def doSeek(self, pos):
         if self.dvd:
             hms = self.Pos2HMS(pos)
             #print hms.bHours,hms.bMinutes,hms.bSeconds
@@ -586,42 +586,42 @@ class MiniPlayer(object):
             self.dvdControl.PlayAtTime(hms,flags)
         else:
             flags = AM_SEEKING_AbsolutePositioning | AM_SEEKING_SeekToKeyFrame #|AM_SEEKING_NoFlush
-            self.seeking.SetPositions(int(round(pos)),flags,0,AM_SEEKING_NoPositioning)
+            self.seeking.SetPositions(int(round(pos)), flags, 0, AM_SEEKING_NoPositioning)
     
     #---------------------------------------------------------------------------------------
-    def showState(self,state):
+    def showState(self, state):
         p,d = self.getPosAndDuration()
-        self.renderCallback.setState(state,p,d)
+        self.renderCallback.setState(state, p, d)
         
         if state == statePAUSE:
-            self.showOSD(osdPlay,'Pause',delay=self.delayINFINITE)
+            self.showOSD(osdPlay, 'Pause', delay=self.delayINFINITE)
             self.showBattery()
-            self.showOSD(osdLocalTime,'',delay=self.delayINFINITE)
-            self.showOSD(osdTimeline,delay=self.delayINFINITE) 
+            self.showOSD(osdLocalTime, '', delay=self.delayINFINITE)
+            self.showOSD(osdTimeline, delay=self.delayINFINITE) 
 
         elif state == statePLAY:
-            self.showOSD(osdPlay,'Play',delay=1)
-            self.hideOSD(osdBattery,delay=0)
-            self.hideOSD(osdLocalTime,delay=0)
-            self.hideOSD(osdTimeline,delay=1)
+            self.showOSD(osdPlay, 'Play', delay=1)
+            self.hideOSD(osdBattery, delay=0)
+            self.hideOSD(osdLocalTime, delay=0)
+            self.hideOSD(osdTimeline, delay=1)
         
-        elif state in (stateFWD,stateRWD):
-            label = {stateRWD:'<<',stateFWD:'>>'}[state]
+        elif state in (stateFWD, stateRWD):
+            label = {stateRWD:'<<' ,stateFWD:'>>'}[state]
 
-            self.showOSD(osdPlay,label,delay=self.delayINFINITE)
+            self.showOSD(osdPlay, label, delay=self.delayINFINITE)
             self.hideOSD(osdBattery)
             self.hideOSD(osdLocalTime)
-            self.showOSD(osdTimeline,delay=self.delayINFINITE) 
+            self.showOSD(osdTimeline, delay=self.delayINFINITE) 
         
         return d
 
     #---------------------------------------------------------------------------------------
     def showVol(self):
         #vol = int(round(self.getVolume()))
-        self.showOSD(osdVol,'Vol: %d%%'%self.vol,self.vol,delay=1)
+        self.showOSD(osdVol, 'Vol: %d%%'%self.vol, self.vol, delay=1)
 
     #---------------------------------------------------------------------------------------
-    def setBatteryFunc(self,GetBatteryFunc):
+    def setBatteryFunc(self, GetBatteryFunc):
         self.getBattery = GetBatteryFunc
     
     def showBattery(self):
@@ -632,7 +632,7 @@ class MiniPlayer(object):
             if bat is not None:
                 value = bat
                 label = 'POW:%d%%'%bat
-        self.showOSD(osdBattery,label,value,delay=self.delayINFINITE)
+        self.showOSD(osdBattery, label, value, delay=self.delayINFINITE)
         
     #---------------------------------------------------------------------------------------
     delayINFINITE = -1
@@ -643,37 +643,37 @@ class MiniPlayer(object):
 
     def runOsd(self):
         w,h = self.size
-        self.renderCallback.init(w,h,self.osdService,len(self.files),self.fileIndex)
+        self.renderCallback.init(w, h, self.osdService,len(self.files), self.fileIndex)
         self.renderCallback.run()
-        self.osdService.OsdSetRenderCallback('miniPlayer.osd',self.renderCallback,None)
+        self.osdService.OsdSetRenderCallback('miniPlayer.osd', self.renderCallback,None)
 
     def isOsdInitialized(self):
         return self.renderCallback.isInitialized()
 
     def stopOsd(self):
         self.renderCallback.stop()
-        self.osdService.OsdSetRenderCallback('miniPlayer.osd',None,None)
+        self.osdService.OsdSetRenderCallback('miniPlayer.osd', None, None)
 
-    def showOSD(self,name,label='',value=-1,delay=defaultDelay):
-        self.renderCallback.showButton(name,label,value,delay)
+    def showOSD(self, name,label='', value=-1, delay=defaultDelay):
+        self.renderCallback.showButton(name, label, value, delay)
 
-    def hideOSD(self,name,delay=0):
-        self.renderCallback.hideButton(name,delay)
+    def hideOSD(self, name, delay=0):
+        self.renderCallback.hideButton(name, delay)
 
     def hideAllOSDExceptAudioSrt(self):
-        for name in  (osdPlay,osdTimeline,osdVol,osdBattery,osdLocalTime):
-            self.hideOSD(name,delay=0)
+        for name in  (osdPlay, osdTimeline, osdVol, osdBattery, osdLocalTime):
+            self.hideOSD(name, delay=0)
 
     #---------------------------------------------------------------------------------------
-    def showAudioSrt(self,name,label,labels,index,selected):
+    def showAudioSrt(self, name, label, labels, index, selected):
         labels = labelsSEPARATOR.join(labels)
-        self.renderCallback.showCombo(name,label,labels,index,selected)
+        self.renderCallback.showCombo(name, label, labels, index, selected)
 
-    def hideAudioSrt(self,name):
+    def hideAudioSrt(self, name):
         self.renderCallback.hideCombo(name)
 
-    def changeSelectionAudioSrt(self,name,index,selected):
-        self.renderCallback.selectCombo(name,index,selected)
+    def changeSelectionAudioSrt(self, name, index,selected):
+        self.renderCallback.selectCombo(name, index, selected)
 
     def beginSelectAudioSrt(self):
         self.chooseAudioSrt = True
@@ -681,11 +681,11 @@ class MiniPlayer(object):
         self.col = 0
 
         self.hideAllOSDExceptAudioSrt()
-        self.showAudioSrt(osdAudio,'Audio',[s.name for s in self.audio],self.audioIndex,self.col==0)
-        self.showAudioSrt(osdSrt,'Sous-titres',[s.name for s in self.srt],self.srtIndex,self.col==1)
+        self.showAudioSrt(osdAudio,'Audio',[s.name for s in self.audio], self.audioIndex, self.col==0)
+        self.showAudioSrt(osdSrt,'Sous-titres',[s.name for s in self.srt], self.srtIndex, self.col==1)
         self.pause()
 
-    def endSelectAudioSrt(self,select):
+    def endSelectAudioSrt(self, select):
         self.hideAudioSrt(osdAudio)
         self.hideAudioSrt(osdSrt)
 
@@ -696,7 +696,7 @@ class MiniPlayer(object):
         self.showState(statePLAY)
         self.play()
     
-    def selectAudioSrt(self,cmd):
+    def selectAudioSrt(self, cmd):
         dx,dy = dict(up=(0,-1), down=(0,1), left=(-1,0), right=(1,0))[cmd]
 
         self.col = (self.col+dx)%2
@@ -705,11 +705,11 @@ class MiniPlayer(object):
         else:
             self.srtIndex = self.keepInRange(0, self.srtIndex+dy, len(self.srt)-1)
 
-        self.changeSelectionAudioSrt(osdAudio,self.audioIndex,self.col==0)
-        self.changeSelectionAudioSrt(osdSrt,self.srtIndex,self.col==1)
+        self.changeSelectionAudioSrt(osdAudio, self.audioIndex, self.col==0)
+        self.changeSelectionAudioSrt(osdSrt, self.srtIndex, self.col==1)
 
-    def keepInRange(self,amin,v,amax):
-        return max(amin,min(v,amax))
+    def keepInRange(self, amin, v, amax):
+        return max(amin, min(v, amax))
             
     #---------------------------------------------------------------------------------------
     NoSubtitleTxt = 'Pas de Sous-Titres'
@@ -717,7 +717,7 @@ class MiniPlayer(object):
     class sourceStream():
         types = {1:'A', 2:'S', 6590018:'S', 6590016:'embedded'} 
 
-        def __init__(self,index,iss,filterName,dummyNoSubtitle=False,betterName=True):
+        def __init__(self, index, iss, filterName, dummyNoSubtitle=False, betterName=True):
             self.index = index
             self.iss = iss
             self.showStream = None
@@ -765,7 +765,7 @@ class MiniPlayer(object):
             for abr in (w for w in words if len(w)==3): #3 letters words are potentially an ISO 639-2 language code
                 lang = iso639.langs.get(abr,None)
                 if lang is not None: #assume that the first one is a valid language code
-                    self.name = '%s %s'%(lang.capitalize(),forced)
+                    self.name = '%s %s'%(lang.capitalize(), forced)
                     return 
 
         def isAudio(self):  return self.type =='A'
@@ -775,9 +775,9 @@ class MiniPlayer(object):
         def isEmbeddedSrt(self) : return self.type == 'embedded' #XY stream to select embedded (LAV) subtitles
         
         def _select(self):
-            self.iss.Enable(self.index,1)
+            self.iss.Enable(self.index, 1)
         
-        def select(self,player):
+        def select(self, player):
             if self.dummyNoSubtitle:
                 player.hideSrtStream._select() #hide srt with XYsubfilter
             else:
@@ -791,15 +791,15 @@ class MiniPlayer(object):
             del self.iss
 
     class dvdTrack(object):
-        def getLang(self,lcid):
+        def getLang(self, lcid):
             name = LPWSTR(' '*255)
-            getLocaleInfo(lcid,LOCALE_SLOCALIZEDLANGUAGENAME,name,255)
+            getLocaleInfo(lcid, LOCALE_SLOCALIZEDLANGUAGENAME,name,255)
             return name.value
 
         def release(self): pass
 
     class dvdSRT(dvdTrack):
-        def __init__(self,index,player,noSrt=False):
+        def __init__(self, index, player, noSrt=False):
             self.index = index
             self.noSrt = noSrt
             if self.noSrt :
@@ -807,10 +807,10 @@ class MiniPlayer(object):
             else:
                 attr = player.dvdInfo.GetSubpictureAttributes(index)
                 lang = self.getLang(attr.Language) if attr.Language else 'Inconnu'
-                ext = 'Commentaires ' if attr.LanguageExtension in (DVD_SP_EXT_DirectorComments_Normal,DVD_SP_EXT_DirectorComments_Big,DVD_SP_EXT_DirectorComments_Children) else ''
-                self.name = '%s%s'%(ext,lang)
+                ext = 'Commentaires ' if attr.LanguageExtension in (DVD_SP_EXT_DirectorComments_Normal, DVD_SP_EXT_DirectorComments_Big, DVD_SP_EXT_DirectorComments_Children) else ''
+                self.name = '%s%s'%(ext, lang)
 
-        def select(self,player):
+        def select(self, player):
             if self.noSrt :
                 player.dvdControl.SetSubpictureState(0, DVD_CMD_FLAG_Block)
             else:
@@ -818,35 +818,35 @@ class MiniPlayer(object):
                 player.dvdControl.SetSubpictureState(1, DVD_CMD_FLAG_Block)
 
     class dvdAUDIO(dvdTrack):
-        def __init__(self,index,player):
+        def __init__(self, index, player):
             self.index = index
 
             attr = player.dvdInfo.GetAudioAttributes(index)
             lang = self.getLang(attr.Language) if attr.Language else 'Inconnu' 
-            ext = 'Commentaires ' if attr.LanguageExtension in (DVD_AUD_EXT_DirectorComments1,DVD_AUD_EXT_DirectorComments2) else ''
+            ext = 'Commentaires ' if attr.LanguageExtension in (DVD_AUD_EXT_DirectorComments1, DVD_AUD_EXT_DirectorComments2) else ''
 
             freq = '%dkHz'%(attr.dwFrequency/1000)
 
             aformat = {DVD_AudioFormat_AC3:'AC3', DVD_AudioFormat_MPEG1:'MPEG1', DVD_AudioFormat_MPEG1_DRC:'MPEG1', DVD_AudioFormat_MPEG2:'MPEG2', DVD_AudioFormat_MPEG2_DRC:'MPEG2', DVD_AudioFormat_LPCM:'LPCM', DVD_AudioFormat_DTS:'DTS',DVD_AudioFormat_SDDS:'SDDS'}
-            aformat = aformat.get(attr.AudioFormat,'')
+            aformat = aformat.get(attr.AudioFormat, '')
 
             channels = {1:'Mono', 2:u'Stéréo', 3:'2.1', 4:'Quadriphonie', 5:'5.0', 6:'5.1', 7:'7.0', 8:'7.1'}
-            channels = channels.get(attr.bNumberOfChannels,'')
+            channels = channels.get(attr.bNumberOfChannels, '')
             
-            self.name = '%s%s (%s)'%(ext,lang,' '.join((aformat,channels,freq)) )
+            self.name = '%s%s (%s)'%(ext, lang, ' '.join((aformat, channels, freq)) )
         
         def select(self,player):
             player.dvdControl.SelectAudioStream(self.index, DVD_CMD_FLAG_Block)
 
-    def getStreamFromFilter(self,filtername,betterName=True):
+    def getStreamFromFilter(self, filtername, betterName=True):
         f = self.fg.FindFilterByName(LPCWSTR(filtername))
         iss = f.QueryInterface(IAMStreamSelect)
 
         for i in range(iss.Count()):
-            yield self.sourceStream(i,iss,filtername,betterName=betterName)
+            yield self.sourceStream(i, iss, filtername, betterName=betterName)
 
     def initAUDIOSRT(self):
-        self.srt, self.audio = [],[]
+        self.srt, self.audio = [], []
         self.embeddedSrtStream = None
         self.showSrtStream = None
         self.hideSrtStream = None
@@ -865,12 +865,12 @@ class MiniPlayer(object):
 
             nb,index,disabled = self.dvdInfo.GetCurrentSubpicture()
             nb = min(nb,16)
-            self.srt = [self.dvdSRT(0,self,True)]+[self.dvdSRT(i,self) for i in range(nb)]
+            self.srt = [self.dvdSRT(0,self,True)] + [self.dvdSRT(i, self) for i in range(nb)]
             self.srtIndex = 0 if disabled else index+1
 
         else :
             self.srt, self.audio = [], []
-            self.srtIndex, self.audioIndex = 0,0
+            self.srtIndex, self.audioIndex = 0, 0
 
             for stream in self.getStreamFromFilter('LavSplitter'):
                 if stream.isAudio():
@@ -881,7 +881,7 @@ class MiniPlayer(object):
                     self.srt.append(stream)
             nbLAVsrt = len(self.srt)
 
-            for stream in self.getStreamFromFilter('XYSubFilter',betterName=False):
+            for stream in self.getStreamFromFilter('XYSubFilter', betterName=False):
                 if stream.isSrt():
                     if stream.selected : self.srtIndex = len(self.srt)
                     self.srt.append(stream)
@@ -897,7 +897,7 @@ class MiniPlayer(object):
             if nbLAVsrt==0:
                 #XYsrt only, add dummyNoSubtitle to let the user hide subtitles
                 if hideStreamSelected : self.srtIndex = len(self.srt) #select dummyNoSubtitle since hideSrtStream is selected
-                self.srt.append(self.sourceStream(0,None,'',dummyNoSubtitle=True))
+                self.srt.append(self.sourceStream(0, None, '', dummyNoSubtitle=True))
 
             elif  self.embeddedSrtStream is None and nbXYsrt>0:  
                 # We got some LAVsrt but embeddedSrtStream is missing (needed to switch from XYsrt to LAVsrt)
@@ -906,8 +906,8 @@ class MiniPlayer(object):
 
             else:
                 #put LAVsrt in front of XYsrt so that LAV noSubtitle stream is last
-                self.srt = self.srt[nbLAVsrt:]+self.srt[:nbLAVsrt] #XY srt + LAv srt
-                self.srtIndex = (self.srtIndex-nbLAVsrt)%len(self.srt)
+                self.srt = self.srt[nbLAVsrt:] + self.srt[:nbLAVsrt] #XY srt + LAv srt
+                self.srtIndex = (self.srtIndex-nbLAVsrt) %len(self.srt)
 
     def selectSRT(self):
         self.srt[self.srtIndex].select(self)
@@ -924,47 +924,47 @@ class MiniPlayer(object):
         self.vol = 100
 
     def percentTodB(self,p):
-        return math.pow(10,-math.log(1+(p/self.dampVol)))
+        return math.pow(10, -math.log(1+(p/self.dampVol)))
 
     '''
     def getVolume(self):
         vol = self.basicAudio.Volume
-        vol = self.dampVol*(math.exp(-math.log(self.cVol-vol/(self.kVol),10))-1)
+        vol = self.dampVol * (math.exp(-math.log(self.cVol-vol/(self.kVol),10))-1)
         self.vol = round(vol,1)
         return self.vol
     '''
 
     def setVolume(self,vol):
         self.vol = vol = min(100,max(0,vol))
-        vol = -self.kVol*(self.percentTodB(vol)-self.cVol)
+        vol = -self.kVol * (self.percentTodB(vol)-self.cVol)
         self.basicAudio.Volume = int(vol)
 
     incVOL = 2
-    def updateVolume(self,dvol):
+    def updateVolume(self, dvol):
         dvol = self.incVOL if dvol is 'up' else -self.incVOL
-        self.vol = self.keepInRange(0,self.vol+dvol,100)
+        self.vol = self.keepInRange(0, self.vol+dvol, 100)
         self.showVol()
         self.setVolume(self.vol)
 
     def getBalance(self):
         bal = self.basicAudio.Balance
-        return 50+bal.value/200
+        return 50 + bal.value/200
 
     def setBalance(self,vol):
-        bal = ((min(100,max(0,vol))-50)*200)
+        bal = ((min(100, max(0, vol))-50) * 200)
         self.basicAudio.Balance = int(bal)
 
     #---------------------------------------------------------------------------------------
-    def computeRot(self,angle):
-        rad = -math.pi*angle/180.
-        cos,sin = math.cos(rad),math.sin(rad)
-        scale =  abs(sin)+abs(cos)
-        return  scale,cos,sin
+    def computeRot(self, angle):
+        rad = -math.pi * angle/180.
+        cos,sin = math.cos(rad), math.sin(rad)
+        scale =  abs(sin) + abs(cos)
+        return  scale, cos, sin
 
     def setRotation(self):
         self.pixelShaders.ClearPixelShaders(ShaderStage_PreScale)
         
-        if self.angle in (90,180,270):
+        if self.angle in (90, 180, 270):
 
             shaderCode  = '''
                         sampler s0 : register(s0);                         
@@ -981,12 +981,12 @@ class MiniPlayer(object):
                         }                                                
                         ''' 
             scale,cos,sin = self.computeRot(self.angle)
-            shaderCode = Template(shaderCode).substitute(SCALE=scale,COS=cos,SIN=sin)
+            shaderCode = Template(shaderCode).substitute(SCALE=scale, COS=cos, SIN=sin)
 
-            self.pixelShaders.AddPixelShader(shaderCode,SHADER_PROFILE,ShaderStage_PreScale,0)
+            self.pixelShaders.AddPixelShader(shaderCode, SHADER_PROFILE, ShaderStage_PreScale, 0)
 
-    def changeRotation(self,inc):
-        self.angle = (self.angle+inc)%360
+    def changeRotation(self, inc):
+        self.angle = (self.angle+inc) % 360
         self.setRotation()
         self.setAspectRatio(setWindowPos=False)
             
@@ -1044,49 +1044,49 @@ class MiniPlayer(object):
             print u"ERROR, can't access REG %s\\%s"%(path,key)
 
     def setLAVvideoHWAccel(self,accel):
-        path = self.LAVPATH+r"\Video\HWAccel"
+        path = self.LAVPATH + r"\Video\HWAccel"
         key = r"HWAccel"
         rtype = win32con.REG_DWORD
-        value = dict(No=0,CopyBack=3,Native=4).get(accel,0)
-        self.setRegKey(self.ROOTKEY,path,key,rtype,value)
+        value = dict(No=0, CopyBack=3, Native=4).get(accel, 0)
+        self.setRegKey(self.ROOTKEY, path, key, rtype, value)
         print 'Lav Video - HWAccel : %s'%accel
 
-    def setLAVaudioDelay(self,delay):
-        path = self.LAVPATH+r"\Audio"
+    def setLAVaudioDelay(self, delay):
+        path = self.LAVPATH + r"\Audio"
         rtype = win32con.REG_DWORD
 
         if delay != 0:
             keyDelay = r"AudioDelay"
-            self.setRegKey(self.ROOTKEY,path,keyDelay,rtype,delay)
+            self.setRegKey(self.ROOTKEY, path, keyDelay, rtype, delay)
 
         enable = 1 if delay !=0 else 0
         keyEnable = r"AudioDelayEnabled"
-        self.setRegKey(self.ROOTKEY,path,keyEnable,rtype,enable)
+        self.setRegKey(self.ROOTKEY, path, keyEnable, rtype, enable)
             
         print 'Lav Audio - Delay : %d'%delay
 
-    def setLAVsubtitlesPref(self,forceFrench=False):
-        path = self.LAVPATH+r"\Splitter"
+    def setLAVsubtitlesPref(self, forceFrench=False):
+        path = self.LAVPATH + r"\Splitter"
         rtype = win32con.REG_SZ
 
         if forceFrench :
             langPrefs = 'fre'
             subPrefs = '*:off'
         else:
-            langs = ('eng','jap','dan','spa','kor','ger','swe','por','ita')
+            langs = ('eng', 'jap', 'dan', 'spa', 'kor', 'ger', 'swe', 'por', 'ita')
             langPrefs = ','.join(langs)
-            subPrefs = ','.join(['%s:fre|n!f*'%l for l in langs]+['*:fre|n!f*','*:*'])
+            subPrefs = ','.join(['%s:fre|n!f*'%l for l in langs] + ['*:fre|n!f*','*:*'])
         
         print 'LAV Audio langs : %s'%langPrefs
 
         key = r"prefAudioLangs"
-        self.setRegKey(self.ROOTKEY,path,key,rtype,langPrefs)
+        self.setRegKey(self.ROOTKEY, path, key, rtype, langPrefs)
         
         key = r"subtitleAdvanced"
-        self.setRegKey(self.ROOTKEY,path,key,rtype,subPrefs)
+        self.setRegKey(self.ROOTKEY, path, key, rtype, subPrefs)
 
     #---------------------------------------------------------------------------------------
-    def handleCommands(self,cmd,pressed):
+    def handleCommands(self, cmd, pressed):
         if self.ready and self.isOsdInitialized():
             #print 'CMD %s %s'%(cmd,pressed)
             try:
@@ -1171,7 +1171,7 @@ class MiniPlayer(object):
             else: raise RuntimeError("unexpected MsgWaitForMultipleObjects return value")
         print 'Msg Pump end'
 
-    def runMsgLoop(self,movieEndedCallback): # Need to be called from the same thread than the one that buildFiltergraph()
+    def runMsgLoop(self, movieEndedCallback): # Need to be called from the same thread than the one that buildFiltergraph()
         self.graphEvent = self.event.GetEventHandle()
         
         while True:
@@ -1179,15 +1179,15 @@ class MiniPlayer(object):
 
             self.releaseFilterGraph() # Need to be called from the same thread than the one that buildFiltergraph()
 
-            viewed,favorite,angle,seek = self.endArgs
+            viewed, favorite, angle, seek = self.endArgs
             if seek is not None:
                 self.seekInPlaylist(seek) # Need to be called from the same thread than the one that buildFiltergraph()
             else:
-                movieEndedCallback(viewed,favorite,angle)
+                movieEndedCallback(viewed, favorite, angle)
                 break
 
-    def stopMsgLoop(self,viewed,favorite,angle,seek):
-        self.endArgs = viewed,favorite,angle,seek
+    def stopMsgLoop(self, viewed, favorite, angle, seek):
+        self.endArgs = viewed, favorite, angle, seek
         win32event.SetEvent(self.stopEvent) #exit pumpMessages
 
     #---------------------------------------------------------------------------------------
@@ -1197,8 +1197,8 @@ class MiniPlayer(object):
         self.rot = context.GetRunningObjectTable()
 
         moniker = POINTER(IMoniker)()
-        _ole32.CreateItemMoniker(LPCOLESTR('!'),LPCOLESTR(self.filterGraphName),byref(moniker))
-        self.regID = self.rot.Register(ROTFLAGS_REGISTRATIONKEEPSALIVE,self.fg,moniker)
+        _ole32.CreateItemMoniker(LPCOLESTR('!'), LPCOLESTR(self.filterGraphName), byref(moniker))
+        self.regID = self.rot.Register(ROTFLAGS_REGISTRATIONKEEPSALIVE, self.fg, moniker)
 
     def delFromROT(self):
         self.rot.Revoke(self.regID)
@@ -1237,7 +1237,7 @@ if __name__ == "__main__":
             self.hwnd = win32gui.CreateWindowEx(styleEx,className,"miniPlayer", style, x,y, w,h, None, None, self.hinst, None)
 
             win32gui.UpdateWindow(self.hwnd)
-            win32gui.SetWindowPos(self.hwnd, win32con.HWND_TOPMOST,0,0,0,0, win32con.SWP_NOSIZE|win32con.SWP_NOMOVE|win32con.SWP_SHOWWINDOW)
+            win32gui.SetWindowPos(self.hwnd, win32con.HWND_TOPMOST, 0,0,0,0, win32con.SWP_NOSIZE|win32con.SWP_NOMOVE|win32con.SWP_SHOWWINDOW)
             win32gui.ShowWindow(self.hwnd, win32con.SW_SHOW)
 
         def movieEnded(self,viewed,favorite,angle):
@@ -1254,7 +1254,7 @@ if __name__ == "__main__":
             return True
 
         def onkeyDown(self,hwnd, msg, wparam, lparam):
-            self.handleKeys(wparam,True)
+            self.handleKeys(wparam, True)
             return True
 
         def onkeyUp(self,hwnd, msg, wparam, lparam):
@@ -1272,13 +1272,13 @@ if __name__ == "__main__":
         cmds = {VK_SPACE:'select', VK_BACK:'back', VK_ESCAPE : 'close' , VK_DELETE : 'close', ord('S'):'lang', VK_NUMPAD0:'lang',
                 VK_UP:'up', VK_DOWN:'down', VK_LEFT: 'left', VK_RIGHT :'right'}
 
-        def handleKeys(self,key,pressed):
+        def handleKeys(self, key, pressed):
             if self.player is not None:
-                cmd = self.cmds.get(key,None)
+                cmd = self.cmds.get(key, None)
                 if key is not None:
-                    self.player.handleCommands(cmd,pressed)
+                    self.player.handleCommands(cmd, pressed)
 
-        def setPlayer(self,player):
+        def setPlayer(self, player):
             self.player = player
 
     def mainLoop():
@@ -1292,19 +1292,19 @@ if __name__ == "__main__":
     X,Y = 0,0
     W,H = 600,600#1920,1200
 
-    window = MiniWindow(X,Y,W,H)
+    window = MiniWindow(X, Y, W, H)
     
     player = MiniPlayer(window)
     window.setPlayer(player)
     
     favorite = None
     if PLAYFAVORITE :
-        with open(favoriteFile,'rb') as f:
+        with open(favoriteFile, 'rb') as f:
             favorite = pickle.load(f)
 
-    movieFile = ['movie1.avi','movie2.mkv'] # or a string if only one file in the playlist
+    movieFile = ['movie1.avi', 'movie2.mkv'] # or a string if only one file in the playlist
 
-    player.playMovie(favorite,movieFile,0)
+    player.playMovie(favorite, movieFile,0)
     player.runMsgLoop(window.movieEnded) #need to be called in the same thread as playMovie !
     print 'EXIT'
     
