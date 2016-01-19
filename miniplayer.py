@@ -49,7 +49,7 @@ UsePSYCO = True
 0
 #---------------------------------------------------------------------------------------
 from OSD import osdPlay, osdTimeline osdVol, osdBattery ,osdLocalTime ,osdAudio ,osdSrt
-from OSD import stateFWD, stateRWD ,statePAUSE, statePLAY ,labelsSEPARATOR
+from OSD import stateFWD, stateRWD, statePAUSE, statePLAY, labelsSEPARATOR
 seekRWD, seekFWD = stateRWD, stateFWD
 
 #-------------------------------------------------------------------------------
@@ -92,18 +92,18 @@ from OSD import IOsdRenderCallback
 class IOsdServices(IUnknown):
     _iid_ = GUID('{3AE03A88-F613-4BBA-AD3E-EE236976BF9A}')
     _methods_ = [
-                    STDMETHOD(HRESULT, 'OsdSetBitmap',[LPCSTR,HBITMAP,NULL,COLORREF,INT,INT,BOOL,INT,DWORD,NULL,NULL,NULL,NULL]),#STDMETHOD(OsdSetBitmap)(LPCSTR name,HBITMAP leftEye = NULL,HBITMAP rightEye = NULL,COLORREF colorKey = 0,int posX = 0,int posY = 0,bool posRelativeToVideoRect = false,int zOrder = 0,DWORD duration = 0,DWORD flags = 0,OSDMOUSECALLBACK callback = NULL,LPVOID callbackContext = NULL,LPVOID reserved = NULL)
-                    STDMETHOD(HRESULT, 'OsdGetVideoRects',[POINTER(RECT),POINTER(RECT)]),
-                    STDMETHOD(HRESULT, 'OsdSetRenderCallback',[LPCSTR,POINTER(IOsdRenderCallback),NULL]),
-                    STDMETHOD(HRESULT, 'OsdRedrawFrame',[])
+                    STDMETHOD(HRESULT, 'OsdSetBitmap',[LPCSTR, HBITMAP, NULL, COLORREF, INT, INT ,BOOL, INT, DWORD, NULL, NULL ,NULL, NULL]),#STDMETHOD(OsdSetBitmap)(LPCSTR name,HBITMAP leftEye = NULL,HBITMAP rightEye = NULL,COLORREF colorKey = 0,int posX = 0,int posY = 0,bool posRelativeToVideoRect = false,int zOrder = 0,DWORD duration = 0,DWORD flags = 0,OSDMOUSECALLBACK callback = NULL,LPVOID callbackContext = NULL,LPVOID reserved = NULL)
+                    STDMETHOD(HRESULT, 'OsdGetVideoRects',[POINTER(RECT), POINTER(RECT)]),
+                    STDMETHOD(HRESULT, 'OsdSetRenderCallback',[LPCSTR, POINTER(IOsdRenderCallback), NULL]),
+                    STDMETHOD(HRESULT, 'OsdRedrawFrame', [])
                 ]
 
 class IMadVRSettings(IUnknown):
     _iid_ = GUID('{6F8A566C-4E19-439E-8F07-20E46ED06DEE}')
     _methods_ = [
                   STDMETHOD(BOOL, 'SettingsGetRevision',[POINTER(c_longlong)]),#(LONGLONG* revision) = 0;
-                  STDMETHOD(BOOL, 'SettingsExport',[POINTER(c_void_p),POINTER(INT)]),#(LPVOID* buf, int* size) = 0;
-                  STDMETHOD(BOOL, 'SettingsImport',[c_void_p,INT]),#(LPVOID buf, int size) = 0;
+                  STDMETHOD(BOOL, 'SettingsExport',[POINTER(c_void_p), POINTER(INT)]),#(LPVOID* buf, int* size) = 0;
+                  STDMETHOD(BOOL, 'SettingsImport',[c_void_p, INT]),#(LPVOID buf, int size) = 0;
                   STDMETHOD(BOOL, 'SettingsSetString',[LPCWSTR, LPCWSTR]),#(LPCWSTR path, LPCWSTR value) = 0;
                   STDMETHOD(BOOL, 'SettingsSetInteger',[LPCWSTR, INT]),#(LPCWSTR path, int     value) = 0;
                   STDMETHOD(BOOL, 'SettingsSetBoolean',[LPCWSTR, BOOL]),#(LPCWSTR path, BOOL    value) = 0;
@@ -172,7 +172,7 @@ class MiniPlayer(object):
 
         self.logFile = None
         if LOG:
-            self.logFile = open('log miniPlayer.txt','w')
+            self.logFile = open('log miniPlayer.txt', 'w')
             self.fg.SetLogFile(msvcrt.get_osfhandle(self.logFile.fileno()))
 
     def initStates(self):
@@ -219,7 +219,7 @@ class MiniPlayer(object):
             self.setDefaultLanguage() #change registry before LAV is created
             sourceFilter = self.createFilter('LavSplitter')
             source = sourceFilter.QueryInterface(IFileSourceFilter)
-            source.Load(LPCOLESTR(filename),None)
+            source.Load(LPCOLESTR(filename), None)
 
         madvr = self.createFilter('madVR')
         self.osdService = madvr.QueryInterface(IOsdServices)
