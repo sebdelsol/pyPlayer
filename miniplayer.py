@@ -46,7 +46,7 @@ LOG = False
 HWACCEL = 'No'#'CopyBack'#'Native'
 AUDIODELAY = 0
 UsePSYCO = True
-
+0
 #---------------------------------------------------------------------------------------
 from OSD import osdPlay,osdTimeline,osdVol,osdBattery,osdLocalTime,osdAudio,osdSrt
 from OSD import stateFWD,stateRWD,statePAUSE,statePLAY,labelsSEPARATOR
