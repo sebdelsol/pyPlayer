@@ -189,8 +189,8 @@ class MiniPlayer(object):
 
     def createFilter(self, filterName):
         clsid = GUID(self.filters[filterName])
-        f = comtypes.CoCreateInstance(clsid, IBaseFilter,comtypes.CLSCTX_INPROC_SERVER)
-        self.fg.AddFilter(f,LPCWSTR(filterName))
+        f = comtypes.CoCreateInstance(clsid, IBaseFilter, comtypes.CLSCTX_INPROC_SERVER)
+        self.fg.AddFilter(f, LPCWSTR(filterName))
         return f
 
     def getFilterName(self, f):
