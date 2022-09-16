@@ -1,5 +1,8 @@
 # -*- coding: cp1252 -*-
 
+#pylint: disable=no-name-in-module
+#pylint: disable=undefined-variable
+
 REALSEEKER = False
 #---------------------------------------------------------------------------------------
 import gc
@@ -36,7 +39,7 @@ comtypes.client.GetModule('.\\tlb\\DirectShow.tlb')
 from comtypes.gen.DirectShowLib import *
 
 comtypes.client.GetModule('.\\tlb\\dvd.tlb')
-from comtypes.gen.DVDlib import *
+from comtypes.gen.DvdLib import *
 
 comtypes.client.GetModule('quartz.dll')
 from comtypes.gen.QuartzTypeLib import IMediaControl, IMediaEventEx, IVideoWindow, IBasicVideo2, IBasicAudio
@@ -45,11 +48,11 @@ from comtypes.gen.QuartzTypeLib import IMediaControl, IMediaEventEx, IVideoWindo
 LOG = False
 HWACCEL = 'No'#'CopyBack'#'Native'
 AUDIODELAY = 0
-UsePSYCO = True
-0
+# UsePSYCO = False
+
 #---------------------------------------------------------------------------------------
-from OSD import osdPlay, osdTimeline, osdVol, osdBattery ,osdLocalTime ,osdAudio ,osdSrt
-from OSD import stateFWD, stateRWD, statePAUSE, statePLAY, labelsSEPARATOR
+from osd import osdPlay, osdTimeline, osdVol, osdBattery ,osdLocalTime ,osdAudio ,osdSrt
+from osd import stateFWD, stateRWD, statePAUSE, statePLAY, labelsSEPARATOR
 seekRWD, seekFWD = stateRWD, stateFWD
 
 #-------------------------------------------------------------------------------
@@ -68,11 +71,12 @@ SHADER_PROFILE = LPCSTR('ps_2_0')
 ShaderStage_PreScale = 0
 ShaderStage_PostScale = 1
 
-class IOsdServices(IUnknown):
-    _iid_ = GUID('{3AE03A88-F613-4BBA-AD3E-EE236976BF9A}')
-    _methods_ = [
-                    STDMETHOD(HRESULT, 'OsdSetBitmap', [LPCSTR, HBITMAP, NULL, COLORREF, INT, INT,BOOL, INT, DWORD, NULL NULL, NULL, NULL])#STDMETHOD(OsdSetBitmap)(LPCSTR name,HBITMAP leftEye = NULL,HBITMAP rightEye = NULL,COLORREF colorKey = 0,int posX = 0,int posY = 0,bool posRelativeToVideoRect = false,int zOrder = 0,DWORD duration = 0,DWORD flags = 0,OSDMOUSECALLBACK callback = NULL,LPVOID callbackContext = NULL,LPVOID reserved = NULL)
-                ]
+# class IOsdServices(IUnknown):
+#     _iid_ = GUID('{3AE03A88-F613-4BBA-AD3E-EE236976BF9A}')
+#     _methods_ = [
+#                     STDMETHOD(HRESULT, 'OsdSetBitmap', [LPCSTR, HBITMAP, NULL, COLORREF, INT, INT,BOOL, INT, DWORD, NULL, NULL, NULL, NULL])
+#                     #STDMETHOD(OsdSetBitmap)(LPCSTR name,HBITMAP leftEye = NULL,HBITMAP rightEye = NULL,COLORREF colorKey = 0,int posX = 0,int posY = 0,bool posRelativeToVideoRect = false,int zOrder = 0,DWORD duration = 0,DWORD flags = 0,OSDMOUSECALLBACK callback = NULL,LPVOID callbackContext = NULL,LPVOID reserved = NULL)
+#                 ]
 
 class IMadVRExternalPixelShaders(IUnknown):
     _iid_ = GUID('{B6A6D5D4-9637-4C7D-AAAE-BC0B36F5E433}')
@@ -87,7 +91,7 @@ class IMadVRExclusiveModeControl(IUnknown):
                     STDMETHOD(HRESULT, 'DisableExclusiveMode', [BOOL])
                 ]
 
-from OSD import IOsdRenderCallback
+from osd import IOsdRenderCallback
 
 class IOsdServices(IUnknown):
     _iid_ = GUID('{3AE03A88-F613-4BBA-AD3E-EE236976BF9A}')
@@ -139,10 +143,10 @@ class MiniPlayer(object):
                     LavAudio =      '{E8E73B6B-4CB3-44A4-BE99-4F7BCB96E491}',
                     madVR =         '{E1A8B82A-32CE-4B0D-BE0D-AA68C772E423}',
                     XYSubFilter =   '{2DFCB782-EC20-4A7C-B530-4577ADB33F21}',
-                    reclock =       '{9DC15360-914C-46B8-B9DF-BFE67FD36C6A}'
+                    # reclock =       '{9DC15360-914C-46B8-B9DF-BFE67FD36C6A}'
                     )
     
-    videoFilters = ('LavVideo', 'LavAudio', 'XYSubFilter', 'reclock')
+    videoFilters = ('LavVideo', 'LavAudio', 'XYSubFilter')#, 'reclock')
     filterGraphName = 'FilterGraph miniPlayer'
     TicksInSec = 1000*1000*10. #1 tick = 100 ns
 
@@ -188,6 +192,7 @@ class MiniPlayer(object):
         self.dvdControl.SetOption(DVD_EnablePortableBookmarks, 1)
 
     def createFilter(self, filterName):
+        print filterName
         clsid = GUID(self.filters[filterName])
         f = comtypes.CoCreateInstance(clsid, IBaseFilter, comtypes.CLSCTX_INPROC_SERVER)
         self.fg.AddFilter(f, LPCWSTR(filterName))
@@ -231,7 +236,7 @@ class MiniPlayer(object):
         self.videoWindow.Owner = self.hwnd #better for madvr
 
         for filterName in self.videoFilters:
-            f = self.createFilter(filterName)
+            self.createFilter(filterName)
 
         for pin in sourceFilter.EnumPins():
             self.fg.Render(pin)
@@ -277,7 +282,7 @@ class MiniPlayer(object):
     def clean(self):
         print 'Release filterGraph'
         nb = self.fg.Release()
-        for i in range(nb):
+        for _ in range(nb):
             self.fg.Release()
         gc.collect()
 
@@ -398,6 +403,7 @@ class MiniPlayer(object):
             try:
                 self.dvdControl.ShowMenu(2,0) #main menu
             except comtypes.COMError,e:
+                #pylint: disable=no-member
                 print "can't acces menu, hresult %s"%hex(0xffffffff+e.hresult) 
 
     #---------------------------------------------------------------------------------------
@@ -1204,9 +1210,9 @@ class MiniPlayer(object):
         self.rot.Revoke(self.regID)
         del self.rot
 
-if UsePSYCO:
-    import psyco
-    psyco.bind(MiniPlayer)
+# if UsePSYCO:
+#     import psyco
+#     psyco.bind(MiniPlayer)
        
 #---------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------
@@ -1290,7 +1296,7 @@ if __name__ == "__main__":
     favoriteFile = 'favorite.miniplayer'
 
     X,Y = 0,0
-    W,H = 600,600#1920,1200
+    W,H = 1920,1200
 
     window = MiniWindow(X, Y, W, H)
     
@@ -1302,7 +1308,7 @@ if __name__ == "__main__":
         with open(favoriteFile, 'rb') as f:
             favorite = pickle.load(f)
 
-    movieFile = ['movie1.avi', 'movie2.mkv'] # or a string if only one file in the playlist
+    movieFile = 'f:/movie/automatic/28 Jours plus tard 2002 1080p FR EN x264 AC3-mHDgz.mkv' #['movie1.avi', 'movie2.mkv'] # or a string if only one file in the playlist
 
     player.playMovie(favorite, movieFile,0)
     player.runMsgLoop(window.movieEnded) #need to be called in the same thread as playMovie !
